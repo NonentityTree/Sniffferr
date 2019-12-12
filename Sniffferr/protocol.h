@@ -120,10 +120,10 @@ typedef struct arp_header {
 	u_char arp_hln;   //硬件地址长度
 	u_char arp_pln;   //协议地址长度
 	u_short arp_op;   //ARP/RARP操作
-	u_char saddr;     //发送站协议地址IP
-	u_char daddr;     //目的站协议地址IP
 	u_char arp_eth_src[6]; //发送站硬件地址MAC
+	ip_address saddr;     //发送站协议地址IP
 	u_char arp_eth_dst[6]; //目的站硬件地址MAC
+	ip_address daddr;     //目的站协议地址IP
 }arp_header;
 
 /*OICQ首部*/
@@ -164,3 +164,10 @@ typedef struct dhcp_header {
 	u_int file[32];  //启动文件名
 	u_int opt[16];
 }dhcp_header;
+
+/*ICMPv6首部*/
+typedef struct icmpv6_header {
+	u_char type;            //类型
+	u_char code;            //代码
+	u_short crc;            //校验和
+}icmpv6_header;

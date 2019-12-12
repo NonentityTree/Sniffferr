@@ -258,7 +258,7 @@ CString ARP_analysis(const struct pcap_pkthdr *header, const u_char *pkt_data) {
 	CString str;
 	arp_header *ah = (arp_header *)(pkt_data +
 		14); //以太网头部长度
-	str.Format("ARP\n");
+	str.Format("Network layer: ARP\n");
 	return str;
 }
 
@@ -335,7 +335,8 @@ CString UDP_analysis(const ipv6_header * ih, const u_char * pkt_data)
 CString ICMPv6_analysis(const ipv6_header * ih, const u_char * pkt_data)
 {
 	CString str;
-	str.Format("Application layer: ICMPv6\n");
+	icmpv6_header* ich = (icmpv6_header*)((u_char*)ih + 40);//ipv6首部长度
+	str.Format("Application layer: ICMPv6 Type: %d Code: %d", ich->type, ich->code);
 	return str;
 }
 

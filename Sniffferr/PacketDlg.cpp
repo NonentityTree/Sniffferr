@@ -233,6 +233,26 @@ int parseNshow(pcap_t *adhandle, struct pcap_pkthdr *header, const u_char *pkt_d
 
 		break;
 	}
+	case PROTOCOL_ARP: {
+		u_char* mac_shost = eheader->ether_shost;
+		u_char* mac_dhost = eheader->ether_dhost;
+		str.Format("%s ARP %02x:%02x:%02x:%02x:%02x:%02x -> %02x:%02x:%02x:%02x:%02x:%02x\n",
+			timestr,
+			*mac_shost,
+			*(mac_shost + 1),
+			*(mac_shost + 2),
+			*(mac_shost + 3),
+			*(mac_shost + 4),
+			*(mac_shost + 5),
+			*mac_dhost,
+			*(mac_dhost + 1),
+			*(mac_dhost + 2),
+			*(mac_dhost + 3),
+			*(mac_dhost + 4),
+			*(mac_dhost + 5));
+
+		break;
+	}
 	default:
 		str += ("   Network layer protocol not supportive yet");
 	}
@@ -438,7 +458,42 @@ void PacketDlg::OnLbnSelchangePacketList()
 	}
 
 	case PROTOCOL_ARP: {
-		str = ARP_analysis(header, pkt_data);
+		arp_header *ah = (arp_header *)(pkt_data +
+			14); //以太网头部长度
+		str.Format("Network layer: ARP\n");
+		Information.AddString(str);
+		str.Format("Sender Mac address: %x.%x.%x.%x.%x.%x",
+			*ah->arp_eth_src,
+			*(ah->arp_eth_src + 1),
+			*(ah->arp_eth_src + 2),
+			*(ah->arp_eth_src + 3),
+			*(ah->arp_eth_src + 4),
+			*(ah->arp_eth_src + 5)
+		);
+		Information.AddString(str);
+		str.Format("Sender IP address: %d.%d.%d.%d",
+			ah->saddr.byte1,
+			ah->saddr.byte2,
+			ah->saddr.byte3,
+			ah->saddr.byte4
+		);
+		Information.AddString(str);
+		str.Format("Target Mac address: %x.%x.%x.%x.%x.%x",
+			*ah->arp_eth_dst,
+			*(ah->arp_eth_dst + 1),
+			*(ah->arp_eth_dst + 2),
+			*(ah->arp_eth_dst + 3),
+			*(ah->arp_eth_dst + 4),
+			*(ah->arp_eth_dst + 5)
+		);
+		Information.AddString(str);
+		str.Format("Target IP address: %d.%d.%d.%d",
+			ah->daddr.byte1,
+			ah->daddr.byte2,
+			ah->daddr.byte3,
+			ah->daddr.byte4
+		);
+		Information.AddString(str);
 		break;
 	}
 
@@ -456,7 +511,8 @@ void PacketDlg::OnLbnSelchangePacketList()
 			break;
 		}
 		case PROTOCOL_ICMPv6: {
-			str = ICMPv6_analysis(ih6, pkt_data + 14);
+			icmpv6_header* ich = (icmpv6_header*)((u_char*)ih6 + 40);//ipv6首部长度
+			str.Format("Application layer: ICMPv6 Type: %d Code: %d", ich->type, ich->code);
 			Information.AddString(str);
 			break;
 		}
@@ -503,6 +559,9 @@ void PacketDlg::OnBnClickedStop()
 	{
 		flag_myThread = TRUE;//终止
 		dumpfile = NULL;
+		SetDlgItemInt(IDC_NUMBER, 0, false);
+		packetList.ResetContent();
+		Information.ResetContent();
 	}
 }
 
