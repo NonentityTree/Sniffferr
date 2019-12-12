@@ -383,7 +383,38 @@ void PacketDlg::OnLbnSelchangePacketList()
 			dport = ntohs(uh->dport);
 			if ((sport == PROTOCOL_DHCP_CLIENT && dport == PROTOCOL_DHCP_SERVER
 				|| (dport == PROTOCOL_DHCP_CLIENT && sport == PROTOCOL_DHCP_SERVER))) {
-				str = DHCP_analysis(uh, pkt_data + ip_len);
+				dhcp_header* dhh = (dhcp_header*)((u_char*)uh + 8);//udpÊ×²¿8×Ö½Ú
+				str.Format("Application layer: DHCP TID: %x", ntohs(dhh->xid));
+				Information.AddString(str);
+				if (dhh->op == 0x01) {
+					Information.AddString("Boot Request");
+				}
+				else if (dhh->op == 0x02) {
+					Information.AddString("Boot Reply");
+				}
+				str.Format("Client IP Address: %d.%d.%d.%d",
+					dhh->ciaddr.byte1,
+					dhh->ciaddr.byte2,
+					dhh->ciaddr.byte3,
+					dhh->ciaddr.byte4);
+				Information.AddString(str);
+				str.Format("Your (client) IP Address: %d.%d.%d.%d",
+					dhh->yiaddr.byte1,
+					dhh->yiaddr.byte2,
+					dhh->yiaddr.byte3,
+					dhh->yiaddr.byte4);
+				Information.AddString(str);
+				str.Format("Next Server IP Address: %d.%d.%d.%d",
+					dhh->siaddr.byte1,
+					dhh->siaddr.byte2,
+					dhh->siaddr.byte3,
+					dhh->siaddr.byte4);
+				Information.AddString(str);
+				str.Format("Relay Agent IP Address: %d.%d.%d.%d",
+					dhh->giaddr.byte1,
+					dhh->giaddr.byte2,
+					dhh->giaddr.byte3,
+					dhh->giaddr.byte4);
 				Information.AddString(str);
 			}
 			else if (sport == PROTOCOL_DNS || dport == PROTOCOL_DNS) {
