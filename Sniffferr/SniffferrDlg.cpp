@@ -175,15 +175,15 @@ HCURSOR CSniffferrDlg::OnQueryDragIcon()
 void CSniffferrDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	this->ShowWindow(SW_HIDE);
 	CDialogEx::OnOK();
-	PacketDlg pktDlg;           // 构造对话框类CTipDlg的实例   
-	pktDlg.alldevs = alldevs;
-	pktDlg.d = d;
-	pktDlg.adhandle = adhandle;
-	pktDlg.DoModal();// 弹出对话框 
-
-	this->ShowWindow(SW_SHOW);
+	PacketDlg dlg;   // 构造对话框类Dlg的实例   
+	dlg.alldevs = alldevs;
+	dlg.d = d;
+	dlg.adhandle = adhandle;
+	dlg.DoModal();// 弹出对话框 
+	
+	//this->ShowWindow(SW_HIDE);
+	//this->ShowWindow(SW_SHOW);
 
 }
 

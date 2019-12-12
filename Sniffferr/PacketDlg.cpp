@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(PacketDlg, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_PACKET_LIST, &PacketDlg::OnLbnSelchangePacketList)
 	ON_MESSAGE(UPDATEPACKET, &PacketDlg::OnUpdatePacket)
 	ON_BN_CLICKED(IDC_STOP, &PacketDlg::OnBnClickedStop)
+	ON_BN_CLICKED(IDC_RETURN, &PacketDlg::OnBnClickedReturn)
 END_MESSAGE_MAP()
 
 
@@ -503,4 +504,12 @@ void PacketDlg::OnBnClickedStop()
 		flag_myThread = TRUE;//终止
 		dumpfile = NULL;
 	}
+}
+
+
+void PacketDlg::OnBnClickedReturn()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	//GetParent()->ShowWindow(SW_SHOW);
+	
 }
