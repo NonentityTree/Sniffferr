@@ -384,7 +384,7 @@ void PacketDlg::OnLbnSelchangePacketList()
 			if ((sport == PROTOCOL_DHCP_CLIENT && dport == PROTOCOL_DHCP_SERVER
 				|| (dport == PROTOCOL_DHCP_CLIENT && sport == PROTOCOL_DHCP_SERVER))) {
 				dhcp_header* dhh = (dhcp_header*)((u_char*)uh + 8);//udpÊ×²¿8×Ö½Ú
-				str.Format("Application layer: DHCP TID: %x", ntohs(dhh->xid));
+				str.Format("Application layer: DHCP TID: %x", ntohl(dhh->xid));
 				Information.AddString(str);
 				if (dhh->op == 0x01) {
 					Information.AddString("Boot Request");
