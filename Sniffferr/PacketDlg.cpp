@@ -146,8 +146,8 @@ void PacketDlg::OnBnClickedStart()
 	if (p_myThread == NULL) //若无线程启动成功
 	{    //创建并启动线程
 		packetList.ResetContent();
-		p_myThread = AfxBeginThread(MyThreadFunction, (LPVOID)this);//this赋给线程入口函数的参数pParam
 		flag_myThread = FALSE;
+		p_myThread = AfxBeginThread(MyThreadFunction, (LPVOID)this);//this赋给线程入口函数的参数pParam
 	}
 	else
 	{

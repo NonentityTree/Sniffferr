@@ -26,7 +26,7 @@ typedef struct raw_data {
 	const u_char *pkt_data;
 }raw_data;
 
-/*4字节的IP地址*/
+/*以太网帧首部*/
 typedef struct ether_header
 {
 	u_char ether_dhost[6]; //目的Mac地址   
@@ -34,6 +34,7 @@ typedef struct ether_header
 	u_short ether_type;   //协议类型   
 }ether_header;
 
+/*4字节的IP地址*/
 typedef struct ip_address {
 	u_char byte1;
 	u_char byte2;
